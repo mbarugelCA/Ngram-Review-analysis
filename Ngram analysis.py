@@ -16,7 +16,7 @@ import pandas as pd
 
 import math
 import json
-
+from bs4 import BeautifulSoup
 #%% Plotly
 import plotly
 plotly.tools.set_credentials_file(username='mbarugel', api_key='VeZxOOwfeVq5RJ34tEbe')
@@ -34,8 +34,9 @@ campaign_name =  'Comcast Internet Service'
 traindata = full_traindata[(full_traindata['campaign_name'] == campaign_name) & \
                            full_traindata['original_rating'].notna() ]
 y_binary = np.array(traindata['original_rating']) >= 4
-y = np.array(traindata['original_rating']) 
-x = list(traindata.moderated_text)
+y = np.array(traindata['original_rating'])
+
+x = [BeautifulSoup(item.moderated_text).get_text() for index, item in traindata.iterrows()]
 print('Working on',campaign_name,'with',str(traindata.shape[0]),'rows')
 print('Avg Rating',str(round(np.mean(traindata['original_rating']),2)),
       'with std. dev.',str(round(np.std(traindata['original_rating']),2)))
@@ -95,10 +96,12 @@ n_features = X.shape[1]
 doc_query = dict()
 for i in range(n_features):
   if any(df_to_plot['name'] == feat_names[i]):
-    doc_query[feat_names[i]] = [j for j, x in enumerate(X[:,i] != 0) if x ]
+    doc_query[feat_names[i]] = [j for j, x in enumerate(X[:,i] != 0) if x ][0:15]
 with open("doc_queries.js", "w") as f:
   print("doc_query_index = ", json.dumps(doc_query), "\n\n\n", file=f)
 with open("doc_queries.js", "a") as f:
   print("docs = ", json.dumps(x), "\n\n\n", file=f)
+with open("doc_queries.js", "a") as f:
+  print("original_ratings = ", json.dumps(list(y)), "\n\n\n", file=f)
 
 #%%

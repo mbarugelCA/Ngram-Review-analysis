@@ -19,5 +19,29 @@ Plotly.newPlot('clickPoints', data, layout);
 
 //Martin
 myPlot.on('plotly_click', function(data){
-    console.log(data.points[0])
+    var ngram = data.points[0].text
+    console.log('Clicked on ' + ngram);
+    var the_doc_indices = doc_query_index[ngram];
+    var reviews_div = $('#reviews_text');
+    reviews_div.empty();
+    for (i = 0; i < the_doc_indices.length; i++) {
+        this_review = docs[the_doc_indices[i]];
+        this_rating = original_ratings[the_doc_indices[i]];
+        
+        this_review_sentences = this_review.split('.');
+
+        fuse = new Fuse(this_review_sentences, {minMatchCharLength: 4,threshold: 0.5});
+        matches = fuse.search(ngram);
+        modified_review = '';
+        for (j = 0; j < this_review_sentences.length; j++) {
+            if (matches.indexOf(j) > -1 || this_review_sentences[j].indexOf(ngram) > -1) modified_review = modified_review + '<strong>';
+            modified_review = modified_review + this_review_sentences[j];
+            if (matches.indexOf(j) > -1 || this_review_sentences[j].indexOf(ngram) > -1) modified_review = modified_review + '</strong>';
+            modified_review = modified_review + '.';
+        }
+        modified_review = '&#9733;'.repeat(this_rating) + modified_review
+        
+        $('<p/>').html(modified_review).appendTo(reviews_div);
+        $('<hr/>').appendTo(reviews_div);
+    }
 });

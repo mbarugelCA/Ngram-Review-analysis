@@ -1,3 +1,4 @@
 tmp_reviews.gz
 __pycache__
 .DS_Store
+doc_queries.js
