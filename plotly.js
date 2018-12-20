@@ -15,7 +15,7 @@ layout = {hovermode:'closest',
           yaxis:{zeroline:false, hoverformat: '.2f', title: 'Log-Odds of Positive Review'}
      }
 
-Plotly.newPlot('myDiv', data, layout);
+Plotly.newPlot('myDiv', data, layout, {responsive: true});
 
 myPlot.on('plotly_click', function(data){
     console.log(data.points[0])

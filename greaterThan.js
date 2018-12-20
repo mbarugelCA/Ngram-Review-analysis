@@ -19,4 +19,4 @@ layout = {hovermode:'closest',
           xaxis:{zeroline:false, hoverformat: '.2f', title: 'Count'}
      }
 
-Plotly.newPlot('oddsGreater', data, layout);
+Plotly.newPlot('oddsGreater', data, layout, {responsive: true});
