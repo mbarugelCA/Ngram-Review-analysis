@@ -104,4 +104,18 @@ with open("doc_queries.js", "a") as f:
 with open("doc_queries.js", "a") as f:
   print("original_ratings = ", json.dumps(list(y)), "\n\n\n", file=f)
 
-#%%
+#%% Get time series of any given term
+term = 'customer service'
+ind = feat_names.index('customer service')
+df_copy = pd.DataFrame({'date': pd.to_datetime(traindata['published_date']), 
+                        'has_term': (X[:, ind] == 1).toarray()[:,0]})
+agg_df = df_copy.groupby(pd.Grouper(key='date', freq='MS')).agg({'has_term': ['sum','count']})
+agg_df['prop'] = agg_df[('has_term','sum')] / agg_df[('has_term','count')]
+
+#Write to JS file
+with open("time_series.js", "w") as f:
+  print("dates_time_series = ", json.dumps(list(agg_df.index.to_series().dt.strftime('%Y-%m-%d'))), "\n\n\n", file=f)
+with open("time_series.js", "a") as f:
+  print("prop_time_series = ", json.dumps(list(agg_df['prop'])), "\n\n\n", file=f)
+with open("time_series.js", "a") as f:
+  print("count_time_series = ", json.dumps(list(agg_df[('has_term','sum')])), "\n\n\n", file=f)
