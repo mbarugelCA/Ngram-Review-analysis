@@ -18,7 +18,7 @@ var greaterThan = document.getElementById('cust'),
       }];
 
 layout = {hovermode:'closest',
-          title:'Containing Customer',
+          title:'Phrases containing "customer"',
           xaxis:{zeroline:false, hoverformat: '.2f', title: 'Log Odds'}
      }
 

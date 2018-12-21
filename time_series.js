@@ -9,8 +9,8 @@ var seriedetiempo = document.getElementById('timeseries'),
   		type: 'scatter'
       }];
 
-layout = { title:'Time Series',
-		yaxis:{zeroline:false, hoverformat: '.2f', title: '% Of Total'} 
+layout = { title:'Time Series: Reviews mentioning "customer service"',
+		yaxis:{zeroline:false, tickformat: ',.0%', title: '% Of Reviews'} 
 	}
 
 Plotly.newPlot('timeseries', data, layout, {responsive: true});
